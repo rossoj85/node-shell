@@ -1,5 +1,6 @@
 var fs = require('fs')
 var chalk = require('chalk')
+var request = require('request')
 var commands ={}
 const prompt = chalk.red('\nWHAT? >')
 
@@ -57,7 +58,49 @@ commands.tail= (file, n=5)=>{
         process.stdout.write(lastLinesArr)
         process.stdout.write(chalk.red(prompt))
     })
-}
+};
+commands.sort =(file)=>{
+    fs.readFile(`./${file}`, (err, data)=>{
+        if(err) throw err         
+        let linesArr = data.toString().split('\n')
+        let sortedLinesArr = linesArr.sort()
+        // console.log(sortedLinesArr)       
+        process.stdout.write(sortedLinesArr.join('\n'))
+        process.stdout.write(chalk.red(prompt))
+    })
+};
+commands.wc =(file)=>{
+        fs.readFile(`./${file}`, (err, data)=>{
+            if(err) throw err 
+            let linesArr = data.toString().split('\n')
+            let linesCounter = linesArr.length      
+            let wordsCounter = 0
+
+            for(var line of linesArr){
+                let lineArr = line.split(' ')
+                let wordsInLine = lineArr.length
+                wordsCounter+=wordsInLine
+            }      
+            process.stdout.write(`lines-->${linesCounter.toString()} words-->${wordsCounter}`)
+            process.stdout.write(chalk.red(prompt))
+    })
+
+};
+commands.uniq =(file)=>{
+    fs.readFile(`./${file}`, (err, data)=>{
+        if(err) throw err 
+        let resultArr = []
+        let linesArr = data.toString().split('\n')
+        
+        for(var line of linesArr){
+            if(!resultArr.includes(line)){
+                resultArr.push(line)
+            }
+        }
+        process.stdout.write(resultArr.join('\n'))
+        process.stdout.write(chalk.red(prompt))
+    })
+};
 
 
 module.exports=commands

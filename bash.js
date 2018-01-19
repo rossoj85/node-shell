@@ -1,6 +1,6 @@
 var chalk =require('chalk')
 var commands = require('./commands')
-var fs = require('fs')
+// var fs = require('fs')
 const prompt = chalk.red('\nWHAT? >')
 
 // console.log(fs.readdir.toString())
@@ -12,7 +12,7 @@ process.stdin.on('data',function(data){
     var multiCmd = cmd.split(' ')
    
     if (multiCmd.length>1 && commands[multiCmd[0]]) {
-        // console.log('hit!!!')
+        console.log('hit!!!')
         commands[multiCmd[0]](multiCmd.slice(1))
     }
 

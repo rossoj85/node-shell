@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/rossoj85/node-shell#readme",
   "dependencies": {
-    "chalk": "^2.3.0"
+    "chalk": "^2.3.0",
+    "request": "^2.83.0"
   }
 }
