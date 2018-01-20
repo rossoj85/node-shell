@@ -4,20 +4,29 @@ var request = require('request')
 var commands ={}
 
 
-commands.pwd = function(args, done){
+commands.pwd = function(stdin, args, done){
+    if(stdin && !args.lenght) done(stdin)
+    else{
     let output ='';
     output+=process.cwd().trim()
     done(output)
+    }
 };
-commands.process = function(args, done){
-    let output=''
-    console.log(process)
-    done(output);
+commands.process = function(stdin, args, done){
+    if(stdin && !args.lenght) done(stdin)
+    else{
+        let output=''
+        console.log(process)
+        done(output);
+    }
 };
-commands.date = (args, done)=> {
+commands.date = (stdin, args, done)=> {
+    if(stdin && !args.lenght) done(stdin)
+    else{
     let output=''
     output+=Date().trim()
     done(output)
+    }
 };
 
 commands.ls =(stdin, args, done)=>{
