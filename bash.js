@@ -1,37 +1,45 @@
-var chalk =require('chalk')
-var commands = require('./commands')
+const chalk =require('chalk')
+const commands = require('./commands')
 const prompt = chalk.red('\nWHAT? >')
+let cmdGroups =[]; //state of cmd groups that have to be processed one after another
 
-var done = (output)=>{
-    process.stdout.write(output)
-    process.stdout.write(prompt)
-}
-// console.log(fs.readdir.toString())
+
+//Outputs a prompt
 process.stdout.write(prompt)
 
 
 process.stdin.on('data',function(data){
-    var cmd = data.toString().trim();
-    var cmdList = cmd.split(/\s*\|\s*/g)
-    var multiCmd = cmd.split(' ')
-   
-    console.log(cmdList)
-    if (multiCmd.length>1 && commands[multiCmd[0]]) {
-        console.log('hit!!!')
-        commands[multiCmd[0]](multiCmd.slice(1))
-    }
 
-    else if (commands[cmd]) commands[cmd]()
+    //this regex means split on pipe andd any amount of whitespace on either side
+    //globally throughout the string
+    cmdGroups=data.toString().trim().split(/\s*\|\s*/g)
+    execute(cmdGroups.shift())
 
-    else {
-        process.stdout.write('You typed: ' + cmd);
-        process.stdout.write(prompt);
-}
+
+
+
 });
 
+function execute(cmdString, prevOutput){
+    const tokens = cmdString.toString().trim().split(' ')
+    const cmd = tokens[0]
+    const args = tokens.slice(1) //remember args are being passed in as array, no args===empty array
+    
 
+    if(commands[cmd]) {
+        console.log('COMMAND FOUDN')
+        commands[cmd](prevOutput,args,done)
+    }
+}
 
-
+function done(output){
+        if(cmdGroups.length){
+            execute(cmdGroups.shift(),output)
+        }else{
+        process.stdout.write(chalk.yellow(output))
+        process.stdout.write(prompt)
+        }
+    }
 
 
 
